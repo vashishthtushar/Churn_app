@@ -1,127 +1,109 @@
-
 # 📊 Churn Prediction Dashboard  
 🌐 **Live Demo**: [https://churnapp-kdqdhkxsgsnksuedzyehcv.streamlit.app/](https://churnapp-kdqdhkxsgsnksuedzyehcv.streamlit.app/)
 
-An interactive Streamlit-based web application for predicting customer churn in a telecom dataset. This dashboard allows businesses to upload data, visualize churn risks, predict individual customer churn probability, retrain the model, and explore model insights—all through an intuitive user interface.
+An interactive Streamlit-based web application for predicting customer churn in a telecom dataset. Explore client data, retrain models, and visualize insights—all via a user-friendly interface.
 
 ---
 
-## 🚀 Features
+## 🚀 Available Features
 
-- 📈 **Dashboard Overview** – Summary metrics, churn risk distribution pie chart, and top risky users.
-- 🧾 **Real-Time Churn Prediction** – Input new customer data via a form to get churn probability instantly.
-- 🔁 **Model Retraining** – Upload new training/test data to retrain the model on-the-fly.
-- 🧠 **Insights & Visualizations** – Confusion matrix, churn distribution, and user churn heatmap.
-- 📥 **CSV Export** – Download filtered predictions as CSV.
-- 💡 **Multi-page UI** – Cleanly separated navigation tabs (Dashboard, Predict, Retrain, Insights).
+### 📈 Dashboard
+- **Summary Metrics** – Total users, high-risk count, and average churn probability cards.
+- **Pie Chart** – High vs. low churn risk breakdown.
+- **Top Risk Table** – Lists top 10 customers by churn probability.
+- **Filtered View** – Adjust churn-probability threshold to filter users.
+- **Download CSV** – Export filtered results easily.
+
+### 🧾 Real-Time Prediction
+- **User Input Form** – Input user attributes (tenure, services, payment method, etc.) and get churn probability instantly.
+- **Risk-level Advice** – Automatically display "High", "Medium", or "Low" risk suggestions.
+- **SHAP Feature Impact** – Interactive SHAP visualization showing which features most influenced the individual prediction.
+
+### ⚙️ Retrain Model (UI)
+- **File Uploads** – Upload new training and test CSVs directly in app.
+- **Single-click Retrain & Predict** – Automatically retrains with uploaded data and outputs new predictions.
+- **Performance Summary** – Confusion matrix and feature importance chart displayed immediately post-train.
+- **Auto-Update Dashboard** – Retrained predictions populate the Dashboard with fresh analysis.
 
 ---
 
-## 🧠 Technologies & Libraries Used
+## 🧠 Prediction Pipeline Overview
 
-| Library            | Purpose                                       |
+1. **Data Input & Preprocessing**  
+   - Handles missing values, encodes categorical feats via `LabelEncoder`, scales numeric with `StandardScaler`.
+
+2. **Model Architecture**  
+   - RandomForestClassifier (100 trees, `random_state=42`) for churn classification.
+
+3. **Explanation & Thresholding**  
+   - Uses probability output for risk classification (threshold = 0.7), accompanied by SHAP explanation.
+
+4. **Retraining Mechanism**  
+   - Seamlessly retrains the same pipeline upon data upload and visualizes new model performance.
+
+---
+
+## 📈 Model Performance
+
+- **Algorithm**: Random Forest Classifier
+- **Train-Test Split**: 80-20
+- **Metric Used**: ROC AUC Score
+
+| Metric        | Value     |
+|---------------|-----------|
+| Accuracy      | ~83%      |
+| ROC AUC Score | ~0.86     |
+| Precision     | Balanced  |
+| Recall        | Good churn detection sensitivity |
+
+> 📌 These values may vary slightly after retraining using new data.
+
+
+## 📊 Built-in Visualizations
+
+- Pie chart (risk distribution)
+- Top 10 churners bar
+- SHAP summary plot (feature influence per prediction)
+- Confusion matrix and feature importance visuals after retraining
+
+---
+
+## 🧩 Tech Stack & Dependencies
+
+| Package            | Purpose                                       |
 |--------------------|-----------------------------------------------|
-| `streamlit`        | Interactive UI and deployment framework       |
-| `pandas`           | Data manipulation and CSV handling            |
-| `numpy`            | Numerical computing                           |
-| `scikit-learn`     | Model training, scaling, encoding, evaluation |
-| `matplotlib`       | Visualizations (charts, plots)                |
-| `seaborn`          | Confusion matrix heatmaps                     |
-| `joblib`           | Model saving/loading                          |
-| `pickle`           | Storing column order for form inputs          |
+| `streamlit`        | Web UI framework                              |
+| `pandas`, `numpy`  | Data handling and numerical operations        |
+| `scikit-learn`     | Model, scaling, encoding, and evaluation      |
+| `matplotlib`, `seaborn` | Plotting, confusion matrix                |
+| `joblib`, `pickle` | Save/load model, encoders, column metadata    |
+| `shap`             | Interpretability via explainable AI           |
 
 ---
 
-## 🗂️ Project Structure
+## 🚀 Deployment Setup
 
-churn_app/
-├── app.py # Main Streamlit app
-├── train_and_predict.py # Model training script
-├── churn_predictions.csv # Sample output predictions
-├── telco_train.csv # Training dataset
-├── telco_test.csv # Test dataset
-├── model.pkl # Trained model
-├── scaler.pkl # Scaler used in training
-├── label_encoders.pkl # Encoders for categorical columns
-├── columns.pkl # Column order used in training
-├── requirements.txt # Python dependencies
-└── README.md
+**Prerequisites**:
+- Python 3.8+, Git, streamlit CLI
 
-yaml
-Copy code
-
----
-
-## 🧪 How to Run Locally
-
-### ✅ Prerequisites
-
-- Python 3.8 or higher
-- Git installed
-
-### 📦 1. Clone the repository
-
+**Install & Run Locally**:
 ```bash
 git clone https://github.com/vashishthtushar/Churn_app.git
 cd Churn_app
-📥 2. Install dependencies
-bash
-Copy code
 pip install -r requirements.txt
-▶️ 3. Run the Streamlit app
-bash
-Copy code
 streamlit run app.py
-Now visit: http://localhost:8501 in your browser.
+```
 
-🌐 Deployment (Streamlit Community Cloud)
-Push your full project to a public GitHub repo.
+- In future we can enhance more this application:
 
-Go to https://streamlit.io/cloud and log in.
+Future Enhancements
+* Live batch uploading of user data for prediction
 
-Click "New App" → Connect GitHub → Select the repo.
+* Automated alerting for flagging high-risk users (email/SMS)
 
-Fill:
+* Interactive dashboards (e.g., retention trends over time)
 
-Branch: main
+* Integration with CRM systems
 
-File: churn_app/app.py
-
-Deploy!
-
-✅ Make sure you include requirements.txt in your GitHub repo so Streamlit installs all necessary libraries.
-
-📂 Required Files
-Ensure these files are present before deploying:
-
-app.py
-
-train_and_predict.py
-
-requirements.txt
-
-telco_train.csv
-
-telco_test.csv
-
-model.pkl, scaler.pkl, label_encoders.pkl, columns.pkl (auto-created after running training)
-
-📽️ Demo
-🎯 Live App:
-https://churnapp-kdqdhkxsgsnksuedzyehcv.streamlit.app/
-
-Or record your own with tools like Loom or OBS Studio.
-
-✨ Future Enhancements (Creative Ideas)
-📌 SHAP-based feature importance explanations
-
-📊 User churn timeline visualization
-
-📬 Email alerts for high-risk churn customers
-
-🧾 Auto-predict from uploaded user batch CSVs
-
-📧 Contact
 Made with ❤️ by Tushar Vashishth and Chetan
 GitHub: @vashishthtushar
-
